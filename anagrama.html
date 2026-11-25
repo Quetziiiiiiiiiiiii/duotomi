@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anagrama Otomí</title>
+  <link rel="stylesheet" href="estilo.css">
+  <style>
+    /* Estilos específicos del juego de anagramas */
+    .pista-palabra {
+      background-color: #d6a29c;
+      color: #f5ebe0;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      display: inline-block;
+      border: 1px solid rgba(245, 235, 224, 0.4);
+    }
+
+    .zona-respuesta, .zona-letras {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      min-height: 65px;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .zona-respuesta {
+      background-color: #faf5f2;
+      border: 2px dashed #b07272;
+    }
+
+    .zona-letras {
+      background-color: rgba(245, 235, 224, 0.15);
+    }
+
+    .ficha-letra {
+      width: 50px;
+      height: 55px;
+      background-color: #f5ebe0;
+      color: #8f5353;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border: 2px solid #b07272;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .ficha-letra:hover {
+      background-color: #ffffff;
+      transform: translateY(-3px);
+    }
+
+    .mensaje-juego {
+      font-size: 1.2rem;
+      font-weight: bold;
+      min-height: 30px;
+      margin-bottom: 20px;
+      color: #f5ebe0;
+    }
+
+    .progreso {
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+      color: #f5ebe0;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <section id="juego-anagrama">
+    <p class="progreso" id="contador">Palabra 1 de 6</p>
+    <h3>JUEGO DE PALABRAS</h3>
+    <h1>Ordena las letras en otomí</h1>
+
+    <div class="pista-palabra" id="pista">Significado: Pato</div>
+
+    <!-- Aquí se colocan las letras elegidas -->
+    <div class="zona-respuesta" id="zona-respuesta"></div>
+
+    <!-- Aquí aparecen las letras revueltas -->
+    <div class="zona-letras" id="zona-letras"></div>
+
+    <div class="mensaje-juego" id="mensaje"></div>
+
+    <div class="botones">
+      <button class="comprobar" onclick="verificarPalabra()">COMPROBAR</button>
+      <button class="saltar" onclick="limpiarIntento()">BORRAR</button>
+      <button class="saltar" onclick="siguientePalabra()">SIGUIENTE</button>
+      <button class="saltar" onclick="window.location.href='juegos.html'">VOLVER A JUEGOS</button>
+    </div>
+  </section>
+
+  <script>
+    // Lista de palabras en otomí y su significado
+    const palabras = [
+      { otomi: "BADU", espanol: "Pato" },
+      { otomi: "GANE", espanol: "Gallo / Pollo" },
+      { otomi: "JUIJI", espanol: "Burro" },
+      { otomi: "MIXTU", espanol: "Gato" },
+      { otomi: "FOY'O", espanol: "Perro" },
+      { otomi: "BAMÄXI", espanol: "Borrego / Oveja" }
+    ];
+
+    let indiceActual = 0;
+    let letrasDisponibles = [];
+    let letrasElegidas = [];
+
+    function mezclarArray(array) {
+      let copia = [...array];
+      for (let i = copia.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copia[i], copia[j]] = [copia[j], copia[i]];
+      }
+      return copia;
+    }
+
+    function cargarPalabra() {
+      const actual = palabras[indiceActual];
+      document.getElementById("contador").textContent = `Palabra ${indiceActual + 1} de ${palabras.length}`;
+      document.getElementById("pista").textContent = `Significado: ${actual.espanol}`;
+      document.getElementById("mensaje").textContent = "";
+
+      letrasElegidas = [];
+      letrasDisponibles = mezclarArray(actual.otomi.split(""));
+      renderizarFichas();
+    }
+
+    function renderizarFichas() {
+      const divRespuesta = document.getElementById("zona-respuesta");
+      const divLetras = document.getElementById("zona-letras");
+
+      divRespuesta.innerHTML = "";
+      divLetras.innerHTML = "";
+
+      // Dibujar letras ya elegidas
+      letrasElegidas.forEach((letra, index) => {
+        const btn = document.createElement("button");
+        btn.className = "ficha-letra";
+        btn.textContent = letra;
+        btn.onclick = () => devolverLetra(index);
+        divRespuesta.appendChild(btn);
+      });
+
+      // Dibujar letras revueltas disponibles
+      letrasDisponibles.forEach((letra, index) => {
+        const btn = document.createElement("button");
+        btn.className = "ficha-letra";
+        btn.textContent = letra;
+        btn.onclick = () => seleccionarLetra(index);
+        divLetras.appendChild(btn);
+      });
+    }
+
+    function seleccionarLetra(index) {
+      const letra = letrasDisponibles.splice(index, 1)[0];
+      letrasElegidas.push(letra);
+      renderizarFichas();
+    }
+
+    function devolverLetra(index) {
+      const letra = letrasElegidas.splice(index, 1)[0];
+      letrasDisponibles.push(letra);
+      renderizarFichas();
+    }
+
+    function limpiarIntento() {
+      cargarPalabra();
+    }
+
+    function verificarPalabra() {
+      const palabraFormada = letrasElegidas.join("");
+      const palabraCorrecta = palabras[indiceActual].otomi;
+      const mensaje = document.getElementById("mensaje");
+
+      if (palabraFormada === palabraCorrecta) {
+        mensaje.textContent = "¡Correcto! Muy bien.";
+        mensaje.style.color = "#d4edda";
+      } else {
+        mensaje.textContent = "Inténtalo de nuevo, revisa el orden de las letras.";
+        mensaje.style.color = "#ffeeba";
+      }
+    }
+
+    function siguientePalabra() {
+      indiceActual++;
+      if (indiceActual >= palabras.length) {
+        indiceActual = 0;
+        alert("¡Felicidades! Completaste todas las palabras del anagrama.");
+      }
+      cargarPalabra();
+    }
+
+    // Iniciar el juego al cargar la página
+    cargarPalabra();
+  </script>
+
+</body>
+</html>

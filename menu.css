@@ -1,0 +1,159 @@
+ menu{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  display: flex;
+  background-color: #faf5f2; /* Fondo beige muy suave para el contenido */
+  color: #4a3b39; /* Texto oscuro cálido para buena lectura */
+  min-height: 100vh;
+}
+
+/* =========================================
+   MENÚ LATERAL (Palo de rosa / Nude y Beige)
+   ========================================= */
+#menu-lateral {
+  width: 250px;
+  background-color: #c88d8d; /* Tono palo de rosa principal */
+  color: #f5ebe0; /* Texto en color beige */
+  height: 100vh;
+  position: fixed; /* Fijo a la izquierda al hacer scroll */
+  top: 0;
+  left: 0;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#menu-lateral .logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 3px;
+  color: #f5ebe0; /* Beige */
+  margin-bottom: 35px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(245, 235, 224, 0.3);
+}
+
+.sidebar ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Espacio entre elementos de la lista */
+}
+
+.sidebar ul li a {
+  display: block;
+  text-decoration: none;
+  color: #f5ebe0; /* Texto beige */
+  background-color: #d6a29c; /* Tono nude / palo de rosa más claro */
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el cursor por el menú lateral */
+.sidebar ul li a:hover {
+  background-color: #b07272; /* Palo de rosa más profundo */
+  color: #ffffff;
+  transform: translateX(5px);
+}
+
+/* =========================================
+   CONTENIDO PRINCIPAL Y MENÚ SUPERIOR
+   ========================================= */
+main {
+  margin-left: 250px; /* Deja espacio para el menú lateral fijo */
+  flex: 1;
+  padding: 30px 50px;
+}
+
+/* Menú superior horizontal */
+.encabezado {
+  background-color: #e6c5be; /* Tono nude suave */
+  padding: 15px 25px;
+  border-radius: 10px;
+  margin-bottom: 35px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.menu-superior ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.menu-superior ul li a {
+  text-decoration: none;
+  color: #5c3d3d;
+  font-weight: 600;
+  padding: 8px 15px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu-superior ul li a:hover {
+  background-color: #c88d8d;
+  color: #f5ebe0; /* Beige */
+}
+
+/* =========================================
+   SECCIONES DE CONTENIDO
+   ========================================= */
+section {
+  background-color: #ffffff;
+  padding: 30px;
+  margin-bottom: 30px;
+  border-radius: 12px;
+  border-left: 6px solid #c88d8d; /* Detalle palo de rosa */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+section h1,
+section h2 {
+  color: #a66868;
+  margin-bottom: 15px;
+}
+
+section p {
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.imagen img {
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================================
+   DISEÑO RESPONSIVO (Pantallas pequeñas)
+   ========================================= */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  #menu-lateral {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  main {
+    margin-left: 0;
+    padding: 20px;
+  }
+}

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otolingo - Memorama con Imágenes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --terracota: #be8684;
+            --terracota-oscuro: #8c5856;
+            --terracota-claro: #cfa19f;
+            --crema-fondo: #faf7f2;
+            --crema-tarjeta: #f5ebe0;
+            --texto-oscuro: #7d4f4d;
+            --verde-acierto: #8fb996;
+            --verde-fondo: #eef6f0;
+        }
+
+        body {
+            background-color: var(--crema-fondo);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Tarjeta principal estilo contenedor de anagrama.html */
+        .tarjeta-principal {
+            background-color: var(--terracota);
+            width: 820px;
+            max-width: 100%;
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(107, 62, 60, 0.15);
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 22px;
+        }
+
+        .etiqueta-superior {
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitulo {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.16);
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            color: var(--crema-tarjeta);
+        }
+
+        /* Marcadores */
+        .info-juego {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            font-size: 15px;
+            flex-wrap: wrap;
+        }
+
+        .puntuacion, .intentos, .encontrados {
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 10px 22px;
+            border-radius: 12px;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .info-juego span {
+            color: var(--crema-tarjeta);
+            font-weight: bold;
+            font-size: 18px;
+            margin-left: 4px;
+        }
+
+        /* TABLERO */
+        .tablero {
+            max-width: 640px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 18px;
+            border-radius: 16px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        /* TARJETAS */
+        .tarjeta {
+            aspect-ratio: 1 / 1;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .tarjeta.volteada {
+            transform: rotateY(180deg);
+        }
+
+        .cara {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            box-shadow: 0 4px 8px rgba(92, 55, 53, 0.18);
+        }
+
+        /* Reverso estilo fichas de letras de la captura */
+        .trasera {
+            background: var(--crema-tarjeta);
+            color: var(--texto-oscuro);
+            font-size: 34px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.15s;
+        }
+
+        .tarjeta:not(.volteada):hover .trasera {
+            background: #ffffff;
+        }
+
+        /* Frente al voltear */
+        .frente {
+            background: #ffffff;
+            border: 3px solid var(--crema-tarjeta);
+            transform: rotateY(180deg);
+            flex-direction: column;
+            padding: 8px;
+        }
+
+        .emoji {
+            font-size: 44px;
+        }
+
+        .palabra {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--texto-oscuro);
+            text-align: center;
+        }
+
+        .tarjeta.acertada .frente {
+            background: var(--verde-fondo);
+            border-color: var(--verde-acierto);
+        }
+
+        /* BOTONES (Estilo COMPROBAR y VOLVER A JUEGOS de la captura) */
+        .contenedor-boton {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .boton {
+            background: var(--crema-tarjeta);
+            color: var(--texto-oscuro);
+            border: none;
+            padding: 14px 30px;
+            font-size: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.15s;
+        }
+
+        .boton:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .boton-secundario {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            padding: 14px 28px;
+            font-size: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .boton-secundario:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* MENSAJE FINAL */
+        .overlay-final {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(92, 55, 53, 0.65);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .mensaje-final {
+            background: var(--terracota);
+            border: 2px solid var(--crema-tarjeta);
+            color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .mensaje-final h2 {
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .mensaje-final p {
+            font-size: 16px;
+            color: var(--crema-tarjeta);
+            margin-bottom: 15px;
+        }
+
+        .mensaje-final .boton {
+            margin-top: 10px;
+        }
+
+        /* Responsivo */
+        @media (max-width: 600px) {
+            .tablero {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                padding: 12px;
+            }
+            .emoji {
+                font-size: 34px;
+            }
+            .palabra {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tarjeta-principal">
+        <header>
+            <div class="etiqueta-superior">JUEGO DE MEMORIA</div>
+            <h1>🦉 Otolingo</h1>
+            <p class="subtitulo">Une la imagen con su palabra en Otomí</p>
+        </header>
+
+        <div class="info-juego">
+            <div class="puntuacion">Puntos: <span id="puntos">0</span></div>
+            <div class="intentos">Intentos: <span id="intentos">0</span></div>
+            <div class="encontrados">Parejas: <span id="encontrados">0</span>/8</div>
+        </div>
+
+        <div class="tablero" id="tablero"></div>
+
+        <div class="contenedor-boton">
+            <button class="boton" onclick="reiniciarJuego()">REINICIAR JUEGO</button>
+            <a href="juegos.html" class="boton-secundario">VOLVER A JUEGOS</a>
+        </div>
+    </div>
+
+    <!-- MENSAJE FINAL -->
+    <div class="overlay-final" id="overlayFinal">
+        <div class="mensaje-final" id="mensajeFinal">
+            <h2>🎉 ¡Felicidades!</h2>
+            <p>Has encontrado todas las parejas en <strong id="totalIntentos">0</strong> intentos.</p>
+            <p>Puntuación final: <strong id="puntosFinal">0</strong> puntos</p>
+            <button class="boton" onclick="reiniciarJuego()">JUGAR OTRA VEZ</button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // BASE DE DATOS: IMAGEN ↔ PALABRA EN OTOMÍ
+        // ==========================================
+        const parejas = [
+            { imagen: "🐕", palabra: "F'yo", nombre: "Perro" },
+            { imagen: "🐱", palabra: "Mixtu", nombre: "Gato" },
+            { imagen: "🏠", palabra: "Nguu", nombre: "Casa" },
+            { imagen: "💧", palabra: "Deje", nombre: "Agua" },
+            { imagen: "🌽", palabra: "dethä", nombre: "Maíz" },
+            { imagen: "☀️", palabra: "Jädi", nombre: "Sol" },
+            { imagen: "🌙", palabra: "Zänä", nombre: "Luna" },
+            { imagen: "👋", palabra: "Jaxia", nombre: "Hola" }
+        ];
+
+        // ==========================================
+        // VARIABLES DEL JUEGO
+        // ==========================================
+        let puntos = 0;
+        let intentos = 0;
+        let parejasEncontradas = 0;
+        let tarjetasVolteadas = [];
+        let bloqueado = false;
+
+        // ==========================================
+        // INICIAR JUEGO
+        // ==========================================
+        function iniciarJuego() {
+            puntos = 0;
+            intentos = 0;
+            parejasEncontradas = 0;
+            tarjetasVolteadas = [];
+            bloqueado = false;
+           
+            actualizarPuntuacion();
+            generarTarjetas();
+        }
+
+        // ==========================================
+        // MEZCLAR ARRAY
+        // ==========================================
+        function mezclar(array) {
+            return array.slice().sort(() => Math.random() - 0.5);
+        }
+
+        // ==========================================
+        // GENERAR TARJETAS
+        // ==========================================
+        function generarTarjetas() {
+            const tablero = document.getElementById('tablero');
+            tablero.innerHTML = "";
+
+            let tarjetas = [];
+            parejas.forEach((par, indice) => {
+                tarjetas.push({ tipo: "imagen", contenido: par.imagen, parId: indice });
+                tarjetas.push({ tipo: "palabra", contenido: par.palabra, parId: indice });
+            });
+
+            tarjetas = mezclar(tarjetas);
+
+            tarjetas.forEach((datos) => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'tarjeta';
+                tarjeta.dataset.parId = datos.parId;
+                tarjeta.dataset.tipo = datos.tipo;
+               
+                if (datos.tipo === "imagen") {
+                    tarjeta.innerHTML = `
+                        <div class="cara trasera">🦉</div>
+                        <div class="cara frente">
+                            <div class="emoji">${datos.contenido}</div>
+                        </div>
+                    `;
+                } else {
+                    tarjeta.innerHTML = `
+                        <div class="cara trasera">🦉</div>
+                        <div class="cara frente">
+                            <div class="palabra">${datos.contenido}</div>
+                        </div>
+                    `;
+                }
+               
+                tarjeta.onclick = () => voltearTarjeta(tarjeta);
+                tablero.appendChild(tarjeta);
+            });
+        }
+
+        // ==========================================
+        // VOLTEAR TARJETA
+        // ==========================================
+        function voltearTarjeta(tarjeta) {
+            if (bloqueado) return;
+            if (tarjeta.classList.contains('volteada')) return;
+            if (tarjeta.classList.contains('acertada')) return;
+
+            tarjeta.classList.add('volteada');
+            tarjetasVolteadas.push(tarjeta);
+
+            if (tarjetasVolteadas.length === 2) {
+                intentos++;
+                actualizarPuntuacion();
+                comprobarPareja();
+            }
+        }
+
+        // ==========================================
+        // COMPROBAR SI SON PAREJA
+        // ==========================================
+        function comprobarPareja() {
+            bloqueado = true;
+            const t1 = tarjetasVolteadas[0];
+            const t2 = tarjetasVolteadas[1];
+
+            if (t1.dataset.parId === t2.dataset.parId) {
+                puntos += 10;
+                parejasEncontradas++;
+               
+                setTimeout(() => {
+                    t1.classList.add('acertada');
+                    t2.classList.add('acertada');
+                    t1.style.cursor = "default";
+                    t2.style.cursor = "default";
+                    actualizarPuntuacion();
+                   
+                    if (parejasEncontradas === parejas.length) {
+                        setTimeout(mostrarMensajeFinal, 500);
+                    }
+                   
+                    tarjetasVolteadas = [];
+                    bloqueado = false;
+                }, 600);
+               
+            } else {
+                setTimeout(() => {
+                    t1.classList.remove('volteada');
+                    t2.classList.remove('volteada');
+                    tarjetasVolteadas = [];
+                    bloqueado = false;
+                }, 1000);
+            }
+        }
+
+        function actualizarPuntuacion() {
+            document.getElementById('puntos').textContent = puntos;
+            document.getElementById('intentos').textContent = intentos;
+            document.getElementById('encontrados').textContent = `${parejasEncontradas}`;
+        }
+
+        function mostrarMensajeFinal() {
+            document.getElementById('totalIntentos').textContent = intentos;
+            document.getElementById('puntosFinal').textContent = puntos;
+            document.getElementById('overlayFinal').style.display = "flex";
+        }
+
+        function cerrarMensaje() {
+            document.getElementById('overlayFinal').style.display = "none";
+        }
+
+        function reiniciarJuego() {
+            cerrarMensaje();
+            iniciarJuego();
+        }
+
+        window.onload = iniciarJuego;
+    </script>
+</body>
+</html>

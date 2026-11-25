@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DUOTOMI</title>
+<link rel="stylesheet" href="estilo.css">
+
+
+</head>
+<body>
+
+
+<!-- LECCIÓN 1 -->
+<section id="leccion1" style="background-color:#d8b0df;color:white;">
+
+
+<h3>Nueva palabra</h3>
+<h1>¿Cuál de estos es el gato?</h1>
+
+
+<div class="container">
+    <!-- Correcta -->
+    <div class="card" onclick="reproducirAudio3()">
+        <img src="img/pato.jpg">   
+             <h3>badu</h3>
+         
+    </div>
+    <div class="card" onclick="reproducirAudio2()">
+         <img src="img/perro.jpg" alt="perro caramelo">
+        <div class="contenido">
+            <h3>foy'o</h3>
+        </div>
+       
+    </div>
+
+
+
+
+    <div class="card" onclick="reproducirAudio1()">
+        <img src="img/gato.jpg">
+        <div class="contenido"></div>
+             <h3>mixtu</h3>
+         </div>
+    </div>
+
+
+<div class="botones">
+    <button class="comprobar" onclick="mostrarleccion2()">
+        COMPROBAR
+ </button>
+    <button class="saltar" onclick="mostrarleccion2()">
+         SALTAR
+    </button>
+</div>
+
+
+ 
+
+
+</section>
+
+<!-- LECCIÓN 2 -->
+<section id="leccion2" style="background-color:#e1a3ec;">
+  <h3>Nueva palabra</h3>
+  <h1>¿Cuál de estos es el pato?</h1>
+
+  <div class="container">
+    <div class="card" onclick="reproducirAudio2()">
+      <img src="img/perro.jpg" alt="perro caramelo">
+      <div class="contenido">
+        <h3>foy'o</h3>
+      </div>
+    </div>
+
+    <div class="card" onclick="reproducirAudio1()">
+      <img src="img/gato.jpg" alt="gato">
+      <div class="contenido">
+        <h3>mixtu</h3>
+      </div>
+    </div>
+
+    <!-- Correcta -->
+    <div class="card" onclick="reproducirAudio3()">
+      <img src="img/pato.jpg" alt="pato">
+      <div class="contenido">
+        <h3>badu</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="botones">
+    <button class="comprobar" onclick="mostrarleccion3()">COMPROBAR</button>
+    <button class="saltar" onclick="mostrarleccion3()">SALTAR</button>
+  </div>
+
+  <p id="resultado2" class="resultado"></p>
+</section>
+
+<!-- LECCIÓN 3 -->
+<section id="leccion3" style="background-color:#edbff5;">
+  <h3>Nueva palabra</h3>
+  <h1>¿Cuál de estos es el burro?</h1>
+
+  <div class="container">
+    <div class="card" onclick="reproducirAudio2()">
+      <img src="img/perro.jpg" alt="perro caramelo">
+      <div class="contenido">
+        <h3>foy'o</h3>
+      </div>
+    </div>
+
+    <div class="card" onclick="reproducirAudio1()">
+      <img src="img/gato.jpg" alt="gato">
+      <div class="contenido">
+        <h3>mixtu</h3>
+      </div>
+    </div>
+
+    <!-- Correcta -->
+    <div class="card" onclick="reproducirAudio4()">
+      <img src="img/burro.jpg" alt="burro">
+      <div class="contenido">
+        <h3>juiji</h3>
+      </div>
+    </div>
+  </div>
+
+   <div class="botones">
+    <button class="comprobar" onclick="mostrarleccion4()">COMPROBAR</button>
+    <button class="saltar" onclick="mostrarleccion4()">SALTAR</button>
+  </div>
+
+  <p id="resultado3" class="resultado"></p>
+</section> <!-- <-- Aquí faltaba cerrar la Lección 3 -->
+
+<!-- LECCIÓN 4 -->
+<section id="leccion4" style="background-color:#edbff5;">
+  <h3>Nueva palabra</h3>
+  <h1>¿Cuál de estos es el perro?</h1>
+
+  <div class="container">
+    <div class="card" onclick="reproducirAudio4()">
+      <img src="img/burro.jpg" alt="burro">
+      <div class="contenido">
+        <h3>juiji</h3>
+      </div>
+    </div>
+
+    <!-- Correcta -->
+    <div class="card" onclick="reproducirAudio2()">
+      <img src="img/perro.jpg" alt="perro caramelo">
+      <div class="contenido">
+        <h3>foy'o</h3>
+      </div>
+    </div>
+
+    <div class="card" onclick="reproducirAudio1()">
+      <img src="img/gato.jpg" alt="gato">
+      <div class="contenido">
+        <h3>mixtu</h3>
+      </div>
+    </div>
+  </div> <!-- <-- Aquí faltaba cerrar el container -->
+
+  <div class="botones">
+    <button class="comprobar" onclick="mostrarleccion5()">COMPROBAR</button>
+    <button class="saltar" onclick="mostrarleccion5()">SALTAR</button>
+  </div>
+
+  <p id="resultado4" class="resultado"></p>
+</section>
+<audio id="audio1" src="audios/Gato.ogg"></audio>
+<audio id="audio2" src="audios/Perro.ogg"></audio>
+<audio id="audio3" src="audios/Pato.ogg"></audio>
+<audio ID="audio4" src="audios/Burro.ogg"></audio>
+
+
+<script>
+function reproducirAudio1(){
+    const audio = document.getElementById("audio1");
+    audio.currentTime = 0;
+    audio.play();
+}
+function reproducirAudio2(){
+    const audio = document.getElementById("audio2");
+    audio.currentTime = 0;
+    audio.play();
+}
+function reproducirAudio3(){
+    const audio = document.getElementById("audio3");
+    audio.currentTime = 0;
+    audio.play();
+}
+function mostrarleccion2(){
+    document.getElementById("leccion1").style.display = "none";
+    document.getElementById("leccion2").style.display = "block";
+
+
+}
+function mostrarleccion3(){
+    document.getElementById("leccion2").style.display = "none";
+    document.getElementById("leccion3").style.display = "block";
+
+
+}
+
+
+</script>
+
+
+</body>
+</html>
